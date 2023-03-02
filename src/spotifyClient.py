@@ -15,6 +15,7 @@ class SpotifyClient:
     def get_user_info(self):
         username = input("Please enter your spotify username: ")
         self.user = username
+        self.am = applemusicpy.AppleMusic(val.secret_key, val.key_id, val.team_id)
 
         return username
     
@@ -110,9 +111,32 @@ class SpotifyClient:
 
         return track_df
     
-    def findAppleIdentifier(title, artist):
-        pass
+    def spotifyPlaylistToApple(self, tracks):
+        
+        artist_name = []
+        track_name = []
+        date_added = []
+        track_id = []
 
+        for track in tracks:
+            track_result = self.am.search(
+                track["track_name"], types=['songs'], limit=1)
+            var = track_result['results']['songs']['data'][0]['attributes']
+            artist_name.append(var['artistName'])
+            track_name.append(var['name'])
+            date_added.append(var['releaseDate'])
+            track_id.append(var['playParams']['id'])
+
+        track_dataframe22 = pd.DataFrame(
+            {'artist_name': artist_name,
+             'track_name': track_name,
+             'release_date': date_added,
+             'id': track_id})
+
+        print(track_dataframe22)
+    
+    def matchByISRC(self, tracks):
+        pass
 
 if __name__ == "__main__":
     playlistFetcher = SpotifyClient()
