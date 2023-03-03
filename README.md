@@ -4,7 +4,7 @@ This web app allows you to easily perform cross-platform playlist migration from
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/Beza4598/spotify_apple_converter)
+![GitHub issues](https://img.shields.io/github/issues-raw/Beza4598/spotify_apple_converter)
 
 ## Overview
 
