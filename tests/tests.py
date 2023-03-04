@@ -2,8 +2,7 @@ import unittest
 from unittest import TestCase, mock
 import pandas as pd
 from unittest.mock import patch
-from spotify_client import SpotifyClient
-
+from src.spotify_client import SpotifyClient
 
 class TestSpotifyClient(unittest.TestCase):
     def test_get_user_info(self):
