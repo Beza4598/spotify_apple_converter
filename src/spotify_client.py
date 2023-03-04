@@ -1,14 +1,15 @@
 import sys
 import spotipy
 import spotipy.util as util
-import val
 import pandas as pd
 
+client_id = "90cc35748b224a06b666072fe72b93e1"
+client_secret = "bbc13812e4644d5ab904f6d32001fcaf"
+callback_address = "http://localhost:8888/callback/"
 
 class SpotifyClient:
-    def __init__(self):
-        self.user = "bezamufc"
-        # self.am = applemusicpy.AppleMusic(val.secret_key, val.key_id, val.team_id)
+    def __init__(self, user):
+        self.user = user
 
     def get_user_info(self):
         username = input("Please enter your spotify username: ")
@@ -18,7 +19,7 @@ class SpotifyClient:
 
     def _generate_token(self, scope):
         token = util.prompt_for_user_token(
-            self.user, scope, val.client_id, val.client_secret, val.callback_address
+            self.user, scope, client_id, client_secret, callback_address
         )
         return token
 
@@ -45,6 +46,7 @@ class SpotifyClient:
 
         else:
             print(f"Unable to generate token for {self.user}")
+            playlist_df = None
 
         return playlist_df
 
@@ -107,6 +109,7 @@ class SpotifyClient:
 
         else:
             print(f"Unable to generate token for {self.user}")
+            track_df = None
 
         return track_df
 
