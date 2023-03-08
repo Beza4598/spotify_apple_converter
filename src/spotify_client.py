@@ -34,6 +34,8 @@ class SpotifyClient:
             sp = spotipy.Spotify(auth=token)
             playlists = sp.current_user_playlists()
 
+            print(playlists)
+
             for playlist in playlists["items"]:
                 playlist_name.append(playlist["name"])
                 playlist_id.append(playlist["id"])
@@ -57,7 +59,7 @@ class SpotifyClient:
             u_choice = input(
                 "Please enter the numbers associated with the playlists you want to transfer separated by commas"
             )
-            u_choice = u_choice.trim().split(",")
+            u_choice = u_choice.strip().split(",")
         if selection == "A":
             u_choice = list(range(0, len(playlists)))
         else:
@@ -143,8 +145,5 @@ class SpotifyClient:
 
 
 if __name__ == "__main__":
-    playlistFetcher = SpotifyClient()
-    result = playlistFetcher.get_tracks_for_playlist("0FM69fPKPRquWibaJmRhqd")[
-        "track_ids"
-    ].to_list()
-    print(result)
+    playlistFetcher = SpotifyClient("bezamufc")
+    result = playlistFetcher.get_user_playlists_sp()
