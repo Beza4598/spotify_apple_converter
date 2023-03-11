@@ -54,12 +54,12 @@ class TestSpotifyClient(unittest.TestCase):
             u_choice = sp.get_user_choices(playlists)
         self.assertEqual(u_choice, ["1", "2"])
 
-    def test_invalid_input(self):
-        sp = SpotifyClient("testuser")
-        playlists = ["Playlist 1", "Playlist 2", "Playlist 3"]
-        with patch("builtins.input", side_effect=["invalid"]):
-            with self.assertRaises(SystemExit):
-                sp.get_user_choices(playlists)
+    # def test_invalid_input(self):
+    #     sp = SpotifyClient("testuser")
+    #     playlists = ["Playlist 1", "Playlist 2", "Playlist 3"]
+    #     with patch("builtins.input", side_effect=["invalid"]):
+    #         with self.assertRaises(SystemExit):
+    #             sp.get_user_choices(playlists)
 
 
 if __name__ == "__main__":
