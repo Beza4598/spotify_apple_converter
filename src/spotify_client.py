@@ -9,8 +9,9 @@ callback_address = "http://localhost:8888/callback/"
 
 
 class SpotifyClient:
-    def __init__(self, user):
+    def __init__(self, user, transfer_all=True):
         self.user = user
+        self.transfer_all = transfer_all
 
     def get_user_info(self):
         username = input("Please enter your spotify username: ")
@@ -54,20 +55,16 @@ class SpotifyClient:
         return playlist_df
 
     def get_user_choices(self, playlists):
-        selection = input("Transfer (A)ll playlists or (S)elect playlists? ")
 
-        if selection == "S":
+        if not self.transfer_all:
             u_choice = input(
                 "Please enter the numbers associated\
                  with the playlists you want to transfer\
                 separated by commas."
             )
             u_choice = u_choice.strip().split(",")
-        if selection == "A":
+        if self.transfer_all:
             u_choice = list(range(0, len(playlists)))
-        else:
-            print("Invalid input. System exiting ...")
-            sys.exit()
 
         return u_choice
 
