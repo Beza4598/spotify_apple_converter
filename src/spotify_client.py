@@ -7,6 +7,7 @@ client_id = "90cc35748b224a06b666072fe72b93e1"
 client_secret = "bbc13812e4644d5ab904f6d32001fcaf"
 callback_address = "http://localhost:8888/callback/"
 
+
 class SpotifyClient:
     def __init__(self, user):
         self.user = user
@@ -57,7 +58,9 @@ class SpotifyClient:
 
         if selection == "S":
             u_choice = input(
-                "Please enter the numbers associated with the playlists you want to transfer separated by commas"
+                "Please enter the numbers associated\
+                 with the playlists you want to transfer\
+                separated by commas."
             )
             u_choice = u_choice.strip().split(",")
         if selection == "A":
@@ -83,8 +86,9 @@ class SpotifyClient:
             results = sp.user_playlist_tracks(self.user, playlist_id)
             tracks = results["items"]
 
-            # avoiding the limit because of paginated results produced by the api
-            # thus we're scrolling through the data to ensure every track is returned
+            # avoiding the limit because of paginated results
+            # produced by the api thus we're scrolling through
+            # the data to ensure every track is returned
             while results["next"]:
                 results = sp.next(results)
                 tracks.extend(results["items"])
@@ -122,7 +126,9 @@ class SpotifyClient:
         track_id = []
 
         for track in tracks:
-            track_result = self.am.search(track["track_name"], types=["songs"], limit=1)
+            track_result = self.am.search(track["track_name"],
+                                          types=["songs"],
+                                          limit=1)
             var = track_result["results"]["songs"]["data"][0]["attributes"]
             artist_name.append(var["artistName"])
             track_name.append(var["name"])
