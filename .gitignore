@@ -130,3 +130,6 @@ dmypy.json
 
 
 *.env
+.coverage
+.cache-*
+
