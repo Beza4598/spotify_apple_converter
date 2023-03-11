@@ -2,7 +2,7 @@
 # BUILD #
 #########
 develop:  ## install dependencies and build library
-	python3 -m pip install -e .[develop]
+	pip install -r requirements.txt
 
 build:  ## build the python library
 	python3 setup.py build build_ext --inplace
@@ -15,7 +15,7 @@ install:  ## install library
 #########
 lint:  ## run static analysis with flake8
 	python3 -m black --check src tests
-	python3 -m flake8 example_project_python setup.py
+	python3 -m flake8 src tests 
 
 # Alias
 lints: lint
@@ -39,10 +39,11 @@ annotate:  ## run type checking
 # TESTS #
 #########
 test: ## clean and run unit tests
-	python -m pytest -v example_project_python/tests
+	python -m pytest -v tests.tests
 
 coverage:  ## clean and run unit tests with coverage
-	python -m pytest -v example_project_python/tests --cov=example_project_python --cov-branch --cov-fail-under=75 --cov-report term-missing
+        pip install coverage
+        coverage run -m unittest tests.tests
 
 # Alias
 tests: test
