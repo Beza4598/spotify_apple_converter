@@ -44,9 +44,10 @@ jobs:
     - name: Checks
       run: |
         make checks
-    - name: Test
+    - name: Generate Report
       run: |
-        make coverage
+        pip install coverage
+        coverage run -m unittest tests.tests
     - name: Upload test results
       uses: actions/upload-artifact@v3
       with:
