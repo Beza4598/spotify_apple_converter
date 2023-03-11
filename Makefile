@@ -2,7 +2,7 @@
 # BUILD #
 #########
 develop:  ## install dependencies and build library
-	pip install -r requirements.txt
+	python3 -m pip install -e .[develop]
 
 build:  ## build the python library
 	python3 setup.py build build_ext --inplace
@@ -21,7 +21,7 @@ lint:  ## run static analysis with flake8
 lints: lint
 
 format:  ## run autoformatting with black
-	python -m black example_project_python/ setup.py
+	python -m black spotify_apple_converter/ setup.py
 
 # alias
 fix: format
@@ -42,8 +42,8 @@ test: ## clean and run unit tests
 	python -m pytest -v tests.tests
 
 coverage:  ## clean and run unit tests with coverage
-        pip install coverage
-        coverage run -m unittest tests.tests
+		pip install coverage
+		coverage run -m unittest tests.tests
 
 # Alias
 tests: test
