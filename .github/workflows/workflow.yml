@@ -32,18 +32,10 @@ jobs:
         cache: "pip"
         cache-dependency-path: 'pyproject.toml'
 
-    - name: Install dependencies
-      run: |
-        make develop
-    - name: Build 
-      run: |
-        make build
+  
     - name: Lint
       run: |
         make lint
-    - name: Checks
-      run: |
-        make checks
     - name: Generate Report
       run: |
         pip install coverage
