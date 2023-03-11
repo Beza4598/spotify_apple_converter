@@ -1,23 +1,58 @@
-name: CodeCov
-on: [push, pull_request]
-jobs:
-  run:
-    runs-on: ubuntu-latest
-    env:
-      OS: ubuntu-latest
-      PYTHON: '3.9'
-    steps:
-    - uses: checkout@v2
-      with:
-        fetch-depth: ‘2’
+name: Build Status
 
-    - name: Setup Python
-      uses: actions/setup-python@master
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+    paths-ignore:
+      - CONTRIBUTING.md
+      - LICENSE
+      - README.md
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.9]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.7
-    - name: Generate Report
+        python-version: ${{ matrix.python-version }}
+        cache: "pip"
+        cache-dependency-path: 'pyproject.toml'
+
+    - name: Install dependencies
       run: |
-        pip install coverage
-        coverage run -m unittest
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v2
+        make develop
+    - name: Build 
+      run: |
+        make build
+    - name: Lint
+      run: |
+        make lint
+    - name: Checks
+      run: |
+        make checks
+    - name: Test
+      run: |
+        make coverage
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: pytest-results-${{ matrix.os }}-${{ matrix.python-version }}
+        path: python_junit.xml
+      if: ${{ always() }}
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
