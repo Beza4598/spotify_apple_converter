@@ -1,6 +1,8 @@
 name: Build Status
-on: [push, pull_request]
- branches:
+
+on:
+  push:
+    branches:
       - main
     tags:
       - v*
