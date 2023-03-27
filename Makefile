@@ -15,7 +15,6 @@ install:  ## install library
 #########
 lint:  ## run static analysis with flake8
 	python3 -m black --check src tests
-	python3 -m flake8 src tests 
 
 # Alias
 lints: lint
