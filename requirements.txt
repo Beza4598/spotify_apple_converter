@@ -1,2 +1,6 @@
 pandas==1.5.3
+apple-music-python==1.0.5
+requests==2.28.2
 spotipy==2.22.1
+
+

@@ -43,8 +43,8 @@ class TestSpotifyClient(unittest.TestCase):
     def test_select_all_playlists(self):
         sp = SpotifyClient("testuser")
         playlists = ["Playlist 1", "Playlist 2", "Playlist 3"]
-        expected_result = [0,1,2]
-        result= sp.get_user_choices(playlists)
+        expected_result = [0, 1, 2]
+        result = sp.get_user_choices(playlists)
         self.assertEqual(expected_result, result)
 
     @patch('builtins.input', return_value='1,3')
@@ -54,13 +54,13 @@ class TestSpotifyClient(unittest.TestCase):
         expected_result = ['1', '3']
         result = sp.get_user_choices(playlists)
         self.assertEqual(result, expected_result)
-    
+
     @patch('builtins.input', return_value='1, 4, 2')
     def test_get_user_choices_multiple(self, mock_input):
         sp = SpotifyClient("testuser", transfer_all=False)
         playlists = ['Playlist 1', 'Playlist 2', 'Playlist 3', 'Playlist 4', 'Playlist 5']
-        expected_result = list (map(int,['1', '4', '2']))
-        result = list (map(int, sp.get_user_choices(playlists)))
+        expected_result = list(map(int, ['1', '4', '2']))
+        result = list(map(int, sp.get_user_choices(playlists)))
         self.assertEqual(result, expected_result)
 
     # def test_invalid_input(self):
