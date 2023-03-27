@@ -10,7 +10,10 @@ This web app allows you to easily perform cross-platform playlist migration from
 
 ## Overview
 
-Run npm start to run the web UI and log in via both your apple music and spotify account. Indicate which platform you are exporting from and which platform you want to import to, select the playlists you want to migrate, and look at the progress on the web app. If any song transfers fail because of availability or mismatch in records between platforms our app will indicate that.
+The first version of this program will allow you to run on one mode --all to transfer all of your playlists from Spotify to Apple music. After cloning the repository to your local machine run `make develop` and `make install` to install the dependencies needed to run the program. Once the dependencies are installed run the program using the following CLI command `spotify_client -all <your_spotify_username>` and the program will first use the Spotipy api to find all of your current playlists on spotify and for each playlist it will go through each track to find an itunes identifier for the track using the track's ISRC, a unique identifier for any soundtrack that has been published publicly. For the songs it was able to match the program will make http POST request to copy each playlist over to apple music with 3 second interval before each insertion to bypass the rate limit apple places on API requests.
+
+To run tests on the program you can use `make test`.
+
 
 ## Usage
 - `make`: list available commands
