@@ -21,7 +21,7 @@ class SpotifyClient:
     def __init__(self, user, transfer_all=True):
         self.user = user
         self.transfer_all = transfer_all
-        self.am = applemusicpy.AppleMusic(secret_key=secret_key, key_id=key_id, team_id=team_id)
+        #self.am = applemusicpy.AppleMusic(secret_key=secret_key, key_id=key_id, team_id=team_id)
         self.am_user_token = ''
         self.am_developer_token = ''
 
