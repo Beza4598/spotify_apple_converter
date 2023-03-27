@@ -14,6 +14,7 @@ The first version of this program will allow you to run on one mode --all to tra
 
 To run tests on the program you can use `make test`.
 
+
 ## Usage
 - `make`: list available commands
 - `make develop`: install and build this library and its dependencies using `pip`
