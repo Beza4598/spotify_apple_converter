@@ -7,7 +7,7 @@ import json
 import time
 import sys
 
-#sample keys until I get access to Apple Developer program
+# sample keys until I get access to Apple Developer program
 secret_key = 'x'
 key_id = 'y'
 team_id = 'z'
@@ -21,9 +21,7 @@ class SpotifyClient:
     def __init__(self, user, transfer_all=True):
         self.user = user
         self.transfer_all = transfer_all
-        self.am = applemusicpy.AppleMusic(secret_key=secret_key, 
-                                          key_id=key_id, 
-                                          team_id=team_id)
+        self.am = applemusicpy.AppleMusic(secret_key=secret_key, key_id=key_id, team_id=team_id)
         self.am_user_token = ''
         self.am_developer_token = ''
 
@@ -34,10 +32,7 @@ class SpotifyClient:
         return username
 
     def _generate_token(self, scope):
-        token = util.prompt_for_user_token(self.user, 
-                                           scope, client_id, 
-                                           client_secret, 
-                                           callback_address)
+        token = util.prompt_for_user_token(self.user, scope, client_id, client_secret, callback_address)
         return token
 
     def get_user_playlists_sp(self):
@@ -57,8 +52,7 @@ class SpotifyClient:
                 playlist_name.append(playlist["name"])
                 playlist_id.append(playlist["id"])
 
-            playlist_df = pd.DataFrame({"playlist_id": playlist_id, 
-                                        "playlist_name": playlist_name})
+            playlist_df = pd.DataFrame({"playlist_id": playlist_id, "playlist_name": playlist_name})
 
             print(playlist_df)
 
@@ -154,79 +148,80 @@ class SpotifyClient:
 
         return track_dataframe
 
-#commented out until I get developer tokens from Apple Developer program
 
-    # def spotifyToAppleMusicUsingISRC(self, tracks):
-    #     track_names = []
-    #     track_ids = []
+# commented out until I get developer tokens from Apple Developer program
 
-    #     for track in tracks:
-    #         track_result = self.am.songs_by_isrc([track["track_isrc"]])
-    #         am_id = track_result[0]["attributes"]["id"]
-    #         track_name = track_result[0]["attributes"]["name"]
-    #         track_names.append(track_name)
-    #         track_ids.append(am_id)
+# def spotifyToAppleMusicUsingISRC(self, tracks):
+#     track_names = []
+#     track_ids = []
 
-    #     track_dataframe = pd.DataFrame(
-    #         {
-    #             "track_name": track_names,
-    #             "id": track_ids,
-    #         }
-    #     )
+#     for track in tracks:
+#         track_result = self.am.songs_by_isrc([track["track_isrc"]])
+#         am_id = track_result[0]["attributes"]["id"]
+#         track_name = track_result[0]["attributes"]["name"]
+#         track_names.append(track_name)
+#         track_ids.append(am_id)
 
-    #     return track_dataframe
+#     track_dataframe = pd.DataFrame(
+#         {
+#             "track_name": track_names,
+#             "id": track_ids,
+#         }
+#     )
 
-    # def create_new_playlist(name):
-    #     playlist_data = {
-    #                     "attributes": 
-    #                      {"name": name, 
-    #                       "description": "Playlist transfered by program."}
-    #                         }
+#     return track_dataframe
 
-    #     response = requests.post(
-    #         "https://api.music.apple.com/v1/me/library/playlists",
-    #         data=json.dumps(playlist_data),
-    #         headers={'Authorization': 'Bearer %s' % developer_token, 'Music-User-Token': music_user_token},
-    #     )
+# def create_new_playlist(name):
+#     playlist_data = {
+#                     "attributes":
+#                      {"name": name,
+#                       "description": "Playlist transfered by program."}
+#                         }
 
-    #     if response.status_code == 201:
-    #         return response.json()['data'][0]['id']
+#     response = requests.post(
+#         "https://api.music.apple.com/v1/me/library/playlists",
+#         data=json.dumps(playlist_data),
+#         headers={'Authorization': 'Bearer %s' % developer_token, 'Music-User-Token': music_user_token},
+#     )
 
-    # def insert_track_to_playlist(self, playlist_id, track_id):
-    #     url = "https://api.music.apple.com/v1/me/library/playlists/%s/tracks" % playlist_id
+#     if response.status_code == 201:
+#         return response.json()['data'][0]['id']
 
-    #     song_data = {"data": [{"id": track_id, "type": "songs"}]}
+# def insert_track_to_playlist(self, playlist_id, track_id):
+#     url = "https://api.music.apple.com/v1/me/library/playlists/%s/tracks" % playlist_id
 
-    #     response = requests.post(
-    #         url,
-    #         data=json.dumps(song_data),
-    #         headers={'Authorization': 'Bearer %s' % self.am_developer_token, 
-    #                  'Music-User-Token': self.am_user_token},
-    #     )
+#     song_data = {"data": [{"id": track_id, "type": "songs"}]}
 
-    #     if response.status_code == 201:
-    #         return True
+#     response = requests.post(
+#         url,
+#         data=json.dumps(song_data),
+#         headers={'Authorization': 'Bearer %s' % self.am_developer_token,
+#                  'Music-User-Token': self.am_user_token},
+#     )
 
-    #     return False
+#     if response.status_code == 201:
+#         return True
 
-    # def transfer_all_playlists(self, playlist_dataframe_sp):
-    #     for ind in playlist_dataframe_sp.index:
-    #         tracks = self.get_tracks_for_playlist(playlist_dataframe_sp["id"][ind])
-    #         apple_music_identifiers = self.spotifyToAppleMusicUsingISRC(tracks)
+#     return False
 
-    #         am_playlist_id = self.create_new_playlist(playlist_dataframe_sp["name"][ind])
+# def transfer_all_playlists(self, playlist_dataframe_sp):
+#     for ind in playlist_dataframe_sp.index:
+#         tracks = self.get_tracks_for_playlist(playlist_dataframe_sp["id"][ind])
+#         apple_music_identifiers = self.spotifyToAppleMusicUsingISRC(tracks)
 
-    #         print(f"#### Adding songs to playlist {am_playlist_id}")
-    #         for id in apple_music_identifiers:
-    #             if self.insert_track_to_playlist(am_playlist_id, id):
-    #                 print(f"Added track {id}")
-    #             else:
-    #                 print(f"Unable to add track {id}")
+#         am_playlist_id = self.create_new_playlist(playlist_dataframe_sp["name"][ind])
 
-    #             time.sleep(2)
+#         print(f"#### Adding songs to playlist {am_playlist_id}")
+#         for id in apple_music_identifiers:
+#             if self.insert_track_to_playlist(am_playlist_id, id):
+#                 print(f"Added track {id}")
+#             else:
+#                 print(f"Unable to add track {id}")
+
+#             time.sleep(2)
+
 
 def main():
-
     args = sys.argv
 
     if len(sys.argv) < 2:
@@ -235,7 +230,7 @@ def main():
 
     mode = sys.argv[1]
 
-    #transfer all playlists
+    # transfer all playlists
     if mode == "-all":
         if len(sys.argv) != 3:
             print("Usage: spotify_client -all <spotify_username>")
@@ -246,6 +241,6 @@ def main():
     playlists = client.get_user_playlists_sp()
     client.transfer_all_playlists(playlists)
 
+
 if __name__ == "__main__":
     main()
-    
