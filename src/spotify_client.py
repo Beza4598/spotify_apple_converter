@@ -46,7 +46,6 @@ class SpotifyClient:
                 client_id, client_secret, callback_address, scope=scope, cache_handler=cache_handler
             )
 
-
         token_info = self.auth_manager.validate_token(self.auth_manager.cache_handler.get_cached_token())
         if not token_info:
             auth_url = self.auth_manager.get_authorize_url()

@@ -6,13 +6,14 @@ from unittest.mock import MagicMock
 from io import StringIO
 from spotipy.oauth2 import SpotifyOAuth, CacheFileHandler
 
+
 class TestSpotifyClient(unittest.TestCase):
     def test_get_user_info(self):
         auth_manager_mock = MagicMock(spec=SpotifyOAuth)
         cache_handler_mock = MagicMock(spec=CacheFileHandler)
         auth_manager_mock.cache_handler = cache_handler_mock
         auth_manager_mock.get_cached_token.return_value = {"access_token": "fake_access_token"}
-        
+
         mock_user = "bezamufc"
         sp = SpotifyClient("bezamufc", auth_manager=auth_manager_mock)
 
