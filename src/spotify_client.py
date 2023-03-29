@@ -39,12 +39,6 @@ class SpotifyClient:
         token = jwt.encode(payload, secret_key, algorithm=self._alg, headers=headers)
         self.developer_token = token if type(token) is not bytes else token.decode()
 
-    # def _generate_token(self, scope):
-    #     cache_path = f'.cache-{self.user}'
-    #     token = util.prompt_for_user_token(self.user, scope, client_id, client_secret, callback_address, cache_path=cache_path)
-
-    #     return token
-
     def _generate_token(self, scope):
         cache_handler = CacheFileHandler(cache_path=f".cache-{self.user}", username=self.user)
         auth_manager = spotipy.SpotifyOAuth(

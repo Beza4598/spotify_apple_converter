@@ -7,7 +7,7 @@ requires = [
 build-backend="setuptools.build_meta"
 
 [project]
-name = "example-project-python"
+name = "spotify-to-apple-py"
 authors = [{name = "Beza Amsalu", email = "beza.amsalu@columbia.edu"}]
 description="Convert spotify playlists to apple music"
 readme = "README.md"

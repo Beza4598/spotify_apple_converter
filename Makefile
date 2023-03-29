@@ -33,7 +33,7 @@ check:  ## check assets for packaging
 checks: check
 
 annotate:  ## run type checking
-	python3 -m mypy ./example_project_python
+	python3 -m mypy ./spotify-to-apple-py
 
 #########
 # TESTS #

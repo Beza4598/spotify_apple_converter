@@ -5,8 +5,9 @@ from src.spotify_client import SpotifyClient
 from unittest.mock import MagicMock
 from io import StringIO
 
-
 class TestSpotifyClient(unittest.TestCase):
+
+    
     def test_get_user_info(self):
         mock_user = "bezamufc"
         sp = SpotifyClient("bezamufc")
