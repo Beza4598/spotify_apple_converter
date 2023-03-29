@@ -8,6 +8,7 @@ import sys
 from datetime import datetime, timedelta
 import jwt
 from config import secret_key, key_id, team_id, client_id, client_secret, callback_address, music_user_token
+from spotipy.oauth2 import CacheFileHandler
 
 
 class SpotifyClient:
@@ -38,10 +39,27 @@ class SpotifyClient:
         token = jwt.encode(payload, secret_key, algorithm=self._alg, headers=headers)
         self.developer_token = token if type(token) is not bytes else token.decode()
 
-    def _generate_token(self, scope):
-        token = util.prompt_for_user_token(self.user, scope, client_id, client_secret, callback_address)
+    # def _generate_token(self, scope):
+    #     cache_path = f'.cache-{self.user}'
+    #     token = util.prompt_for_user_token(self.user, scope, client_id, client_secret, callback_address, cache_path=cache_path)
 
-        return token
+    #     return token
+
+    def _generate_token(self, scope):
+        cache_handler = CacheFileHandler(cache_path=f".cache-{self.user}", username=self.user)
+        auth_manager = spotipy.SpotifyOAuth(
+            client_id, client_secret, callback_address, scope=scope, cache_handler=cache_handler
+        )
+
+        token_info = auth_manager.validate_token(auth_manager.cache_handler.get_cached_token())
+        if not token_info:
+            auth_url = auth_manager.get_authorize_url()
+            print(f"Please navigate here: {auth_url}")
+            response = input("Enter the URL you were redirected to: ")
+            code = auth_manager.parse_response_code(response)
+            token_info = auth_manager.get_access_token(code)
+
+        return token_info["access_token"]
 
     def get_user_playlists_sp(self):
         playlist_name = []
@@ -218,7 +236,7 @@ def main():
     client = SpotifyClient(user_name)
 
     playlists = client.get_user_playlists_sp()
-    client.transfer_all_playlists(playlists)
+    client.transfer_all_playlists(playlists.head(1))
 
 
 if __name__ == "__main__":
