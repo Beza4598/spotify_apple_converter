@@ -1,7 +1,6 @@
 import spotipy
 import pandas as pd
 import applemusicpy
-import spotipy.util as util
 import requests
 import json
 import sys
