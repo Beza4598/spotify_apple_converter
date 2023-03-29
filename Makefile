@@ -15,12 +15,13 @@ install:  ## install library
 #########
 lint:  ## run static analysis with flake8
 	python3 -m black --check src tests
+	python3 -m flake8 src tests
 
 # Alias
 lints: lint
 
-format:  ## run autoformatting with black
-	python -m black spotify_apple_converter/ setup.py
+format: ## run autoformatting with black
+	black ./
 
 # alias
 fix: format
@@ -32,13 +33,13 @@ check:  ## check assets for packaging
 checks: check
 
 annotate:  ## run type checking
-	python -m mypy ./example_project_python
+	python3 -m mypy ./example_project_python
 
 #########
 # TESTS #
 #########
 test: ## clean and run unit tests
-	python -m pytest -v tests.tests
+	python3 -m tests.tests
 
 coverage:  ## clean and run unit tests with coverage
 		pip install coverage
@@ -66,10 +67,10 @@ major:
 # DIST #
 ########
 dist-build:  # Build python dist
-	python setup.py sdist bdist_wheel
+	python3 setup.py sdist bdist_wheel
 
 dist-check:
-	python -m twine check dist/*
+	python3 -m twine check dist/*
 
 dist: clean build dist-build dist-check  ## Build dists
 
