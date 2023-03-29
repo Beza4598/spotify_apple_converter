@@ -42,7 +42,6 @@ test: ## clean and run unit tests
 	python3 -m tests.tests
 
 coverage:  ## clean and run unit tests with coverage
-		pip install coverage
 		coverage run -m unittest tests.tests
 
 # Alias
