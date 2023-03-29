@@ -11,7 +11,7 @@ from spotipy.oauth2 import CacheFileHandler
 
 
 class SpotifyClient:
-    def __init__(self, user, transfer_all=True):
+    def __init__(self, user, transfer_all=True, auth_manager=None):
         self.user = user
         self.transfer_all = transfer_all
         self.music_user_token = music_user_token
@@ -19,6 +19,7 @@ class SpotifyClient:
         self.am = applemusicpy.AppleMusic(secret_key=secret_key, key_id=key_id, team_id=team_id)
         self._alg = 'ES256'
         self._generate_am_token(12)
+        self.auth_manager = auth_manager
 
     def get_user_info(self):
         username = input("Please enter your spotify username: ")
@@ -39,18 +40,20 @@ class SpotifyClient:
         self.developer_token = token if type(token) is not bytes else token.decode()
 
     def _generate_token(self, scope):
-        cache_handler = CacheFileHandler(cache_path=f".cache-{self.user}", username=self.user)
-        auth_manager = spotipy.SpotifyOAuth(
-            client_id, client_secret, callback_address, scope=scope, cache_handler=cache_handler
-        )
+        if self.auth_manager is None:
+            cache_handler = CacheFileHandler(cache_path=f".cache-{self.user}", username=self.user)
+            self.auth_manager = spotipy.SpotifyOAuth(
+                client_id, client_secret, callback_address, scope=scope, cache_handler=cache_handler
+            )
 
-        token_info = auth_manager.validate_token(auth_manager.cache_handler.get_cached_token())
+
+        token_info = self.auth_manager.validate_token(self.auth_manager.cache_handler.get_cached_token())
         if not token_info:
-            auth_url = auth_manager.get_authorize_url()
+            auth_url = self.auth_manager.get_authorize_url()
             print(f"Please navigate here: {auth_url}")
             response = input("Enter the URL you were redirected to: ")
-            code = auth_manager.parse_response_code(response)
-            token_info = auth_manager.get_access_token(code)
+            code = self.auth_manager.parse_response_code(response)
+            token_info = self.auth_manager.get_access_token(code)
 
         return token_info["access_token"]
 
