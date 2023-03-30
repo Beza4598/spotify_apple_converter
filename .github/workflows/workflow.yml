@@ -21,6 +21,13 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version: [3.9]
+    
+    env:
+      APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_USER_TOKEN: ${{ secrets.APPLE_USER_TOKEN }}
+      SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+      SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
 
     steps:
     - uses: actions/checkout@v2

@@ -6,8 +6,26 @@ import json
 import sys
 from datetime import datetime, timedelta
 import jwt
-from config import secret_key, key_id, team_id, client_id, client_secret, callback_address, music_user_token
+
+# from config import secret_key, key_id, team_id, client_id, client_secret, callback_address, music_user_token
 from spotipy.oauth2 import CacheFileHandler
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+my_dir = os.path.dirname(__file__)
+path = os.path.join(my_dir, 'apple_private_key.p8')
+
+with open(path, 'r') as f:
+    secret_key = f.read()
+
+key_id = os.environ.get("APPLE_KEY_ID")
+team_id = os.environ.get("APPLE_TEAM_ID")
+music_user_token = os.environ.get("APPLE_USER_TOKEN")
+client_id = os.environ.get("CLIENT_ID")
+client_secret = os.environ.get("CLIENT_SECRET")
+callback_address = os.environ.get("CALLBACK_ADDRESS")
 
 
 class SpotifyClient:
@@ -231,7 +249,7 @@ def main():
     client = SpotifyClient(user_name)
 
     playlists = client.get_user_playlists_sp()
-    client.transfer_all_playlists(playlists.head(1))
+    client.transfer_all_playlists(playlists)
 
 
 if __name__ == "__main__":
