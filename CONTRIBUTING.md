@@ -27,7 +27,7 @@ The program uses the Spotipy API to retrieve your current Spotify playlists and 
 To run tests on the program, use make test. We welcome contributions to improve the program and its documentation. Please follow the guidelines below when contributing.
 
 ## Contribution Guidelines
-Before creating a pull request, please ensure that the tests pass by running make test.
-Use clear and concise language when adding to or modifying the documentation.
-When adding a new feature or modifying existing code, please include tests to ensure that the code works as expected.
-Follow PEP 8 style guide for Python code.
+* Before creating a pull request, please ensure that the tests pass by running make test.
+* Use clear and concise language when adding to or modifying the documentation.
+* When adding a new feature or modifying existing code, please include tests to ensure that the code works as expected.
+* Follow PEP 8 style guide for Python code.
