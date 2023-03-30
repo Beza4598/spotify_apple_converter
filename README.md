@@ -43,6 +43,9 @@ The program uses the Spotipy API to retrieve your current Spotify playlists and 
 Run tests on the program using make test.
 
 
+Once up and running the program should update you on the progress of conversion as shown below. And pres cmd and click on the link to go to the playlist.
+
+<img width="1174" alt="Screen Shot 2023-03-29 at 10 40 40 PM" src="https://user-images.githubusercontent.com/28851549/228714366-50e001c5-987b-426f-93a5-b3e4af8e7c9a.png">
 
 
 ## Usage
