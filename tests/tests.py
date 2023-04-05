@@ -22,7 +22,7 @@ class TestSpotifyClient(unittest.TestCase):
         sp = SpotifyClient("bezamufc", path, auth_manager=auth_manager_mock)
 
         with patch("sys.stdin", StringIO(mock_user)):
-            self.assertEqual(sp.get_user_info(), mock_user)
+            self.assertEqual(sp._get_user_info(), mock_user)
 
     def test_generate_token(self):
         auth_manager_mock = MagicMock(spec=SpotifyOAuth)
@@ -56,7 +56,7 @@ class TestSpotifyClient(unittest.TestCase):
             }
         )
 
-        result_df = client.get_user_playlists_sp()
+        result_df = client._get_user_playlists_sp()
         pd.testing.assert_frame_equal(result_df, expected_df)
 
     def test_select_all_playlists(self):
@@ -68,7 +68,7 @@ class TestSpotifyClient(unittest.TestCase):
         sp = SpotifyClient("testuser", path, auth_manager=auth_manager_mock)
         playlists = ["Playlist 1", "Playlist 2", "Playlist 3"]
         expected_result = [0, 1, 2]
-        result = sp.get_user_choices(playlists)
+        result = sp._get_user_choices(playlists)
         self.assertEqual(expected_result, result)
 
     @patch('builtins.input', return_value='1,3')
@@ -81,7 +81,7 @@ class TestSpotifyClient(unittest.TestCase):
         sp = SpotifyClient("testuser", path, transfer_all=False, auth_manager=auth_manager_mock)
         playlists = ['Playlist 1', 'Playlist 2', 'Playlist 3', 'Playlist 4']
         expected_result = ['1', '3']
-        result = sp.get_user_choices(playlists)
+        result = sp._get_user_choices(playlists)
         self.assertEqual(result, expected_result)
 
     @patch('builtins.input', return_value='1, 4, 2')
@@ -94,7 +94,7 @@ class TestSpotifyClient(unittest.TestCase):
         sp = SpotifyClient("testuser", path, transfer_all=False, auth_manager=auth_manager_mock)
         playlists = ['Playlist 1', 'Playlist 2', 'Playlist 3', 'Playlist 4', 'Playlist 5']
         expected_result = list(map(int, ['1', '4', '2']))
-        result = list(map(int, sp.get_user_choices(playlists)))
+        result = list(map(int, sp._get_user_choices(playlists)))
         self.assertEqual(result, expected_result)
 
     def test_spotifyToAppleMusicUsingISRC(self):
@@ -114,7 +114,7 @@ class TestSpotifyClient(unittest.TestCase):
             }
         )
         with patch('applemusicpy.AppleMusic.songs_by_isrc', return_value={"data": []}):
-            track_dataframe = client.spotifyToAppleMusicUsingISRC(tracks)
+            track_dataframe = client._spotifyToAppleMusicUsingISRC(tracks)
 
         self.assertEqual(len(track_dataframe), 0)
 
@@ -129,7 +129,7 @@ class TestSpotifyClient(unittest.TestCase):
         with patch('requests.post') as mock_post:
             mock_post.return_value.status_code = 201
             mock_post.return_value.json.return_value = {"data": [{"id": "new_playlist_id"}]}
-            result = client.create_new_playlist("Test Playlist")
+            result = client._create_new_playlist("Test Playlist")
 
         self.assertEqual(result, "new_playlist_id")
 
@@ -143,7 +143,7 @@ class TestSpotifyClient(unittest.TestCase):
 
         with patch('requests.post') as mock_post:
             mock_post.return_value.status_code = 204
-            result = client.insert_track_to_playlist("test_playlist_id", "test_track_id")
+            result = client._insert_track_to_playlist("test_playlist_id", "test_track_id")
 
         self.assertTrue(result)
 
