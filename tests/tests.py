@@ -8,7 +8,7 @@ from io import StringIO
 from spotipy.oauth2 import SpotifyOAuth, CacheFileHandler
 
 
-path = os.path.join('/Users/bezaamsalu/Documents/spotify_apple_converter/src/', 'apple_private_key.p8')
+path = os.path.join('tests/', 'sample_apple_private_key.p8')
 
 
 class TestSpotifyClient(unittest.TestCase):
