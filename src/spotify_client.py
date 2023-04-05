@@ -3,22 +3,14 @@ import pandas as pd
 import applemusicpy
 import requests
 import json
-import sys
 from datetime import datetime, timedelta
 import jwt
-
-# from config import secret_key, key_id, team_id, client_id, client_secret, callback_address, music_user_token
 from spotipy.oauth2 import CacheFileHandler
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-my_dir = os.path.dirname(__file__)
-path = os.path.join(my_dir, 'apple_private_key.p8')
-
-with open(path, 'r') as f:
-    secret_key = f.read()
 
 key_id = os.environ.get("APPLE_KEY_ID")
 team_id = os.environ.get("APPLE_TEAM_ID")
@@ -27,14 +19,21 @@ client_id = os.environ.get("CLIENT_ID")
 client_secret = os.environ.get("CLIENT_SECRET")
 callback_address = os.environ.get("CALLBACK_ADDRESS")
 
-
+"""
+This script provides a way to transfer Spotify playlists to Apple Music 
+using Spotipy and Apple Music API. The script uses the International Standard 
+Recording Code (ISRC) to match the tracks between the two platforms.
+"""
 class SpotifyClient:
-    def __init__(self, user, transfer_all=True, auth_manager=None):
+    def __init__(self, user, path, transfer_all=True, auth_manager=None):
+        with open(path, 'r') as f:
+            self.secret_key = f.read()
+
         self.user = user
         self.transfer_all = transfer_all
         self.music_user_token = music_user_token
         self.developer_token = ''
-        self.am = applemusicpy.AppleMusic(secret_key=secret_key, key_id=key_id, team_id=team_id)
+        self.am = applemusicpy.AppleMusic(secret_key=self.secret_key, key_id=key_id, team_id=team_id)
         self._alg = 'ES256'
         self._generate_am_token(12)
         self.auth_manager = auth_manager
@@ -54,7 +53,7 @@ class SpotifyClient:
             'exp': int(token_exp_time.timestamp()),  # expiration time
         }
         self.token_valid_until = token_exp_time
-        token = jwt.encode(payload, secret_key, algorithm=self._alg, headers=headers)
+        token = jwt.encode(payload, self.secret_key, algorithm=self._alg, headers=headers)
         self.developer_token = token if type(token) is not bytes else token.decode()
 
     def _generate_token(self, scope):
@@ -230,27 +229,27 @@ class SpotifyClient:
             print("\n")
             url = 'https://music.apple.com/library/playlist/' + am_playlist_id
             print("Here is a link to the apple music playlist created: " + url)
+    
+    def transfer_playlist(self, playlist_id, playlist_name):
+        tracks = self.get_tracks_for_playlist(playlist_id)
+        apple_music_identifiers = self.spotifyToAppleMusicUsingISRC(tracks)
 
+        am_playlist_id = self.create_new_playlist(playlist_name)
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: spotify_client <mode>")
-        sys.exit(0)
+        print(f"\nAdding songs to playlist {am_playlist_id}")
 
-    mode = sys.argv[1]
+        for ind in apple_music_identifiers.index:
+            track_name = apple_music_identifiers["track_name"][ind]
+            if self.insert_track_to_playlist(am_playlist_id, apple_music_identifiers["id"][ind]):
+                print(f"Added track {track_name}")
+            else:
+                print(f"Unable to add track {track_name}")
 
-    # transfer all playlists
-    if mode == "-all":
-        if len(sys.argv) != 3:
-            print("Usage: spotify_client -all <spotify_username>")
-            sys.exit(0)
+            print("\n")
+            url = 'https://music.apple.com/library/playlist/' + am_playlist_id
+            print("Here is a link to the apple music playlist created: " + url)
 
-    user_name = sys.argv[2]
-    client = SpotifyClient(user_name)
-
-    playlists = client.get_user_playlists_sp()
-    client.transfer_all_playlists(playlists)
-
-
-if __name__ == "__main__":
-    main()
+    
+    def start(self):
+        playlists = self.get_user_playlists_sp()
+        self.transfer_all_playlists(playlists.head(2))
