@@ -12,15 +12,19 @@ This web app allows you to easily perform cross-platform playlist migration from
 
 This program provides a convenient way to transfer all of your playlists from Spotify to Apple Music. The initial version supports the `--all` mode to transfer all playlists at once. Before running the program, you need to configure the necessary API keys and tokens in the `config.py` file located in the `src` folder.
 
+You can install this python library using:
+
+`pip install spotify-to-apple-py`
+
 ### Apple Music API Configuration
 
-To make requests to the Apple Music API, you need several keys, which can be obtained by enrolling in the Apple Developer Program. Once enrolled, you can access your `team_id`, `secret_key`, and `key_id` directly. However, generating a `music_user_token` requires extra steps since the Apple user authorization service is not available in Python. We recommend following the instructions in this [GitHub repository](https://github.com/KoleMyers/apple-musickit-example) to generate your `music_user_token`. Once you have all of the required information, first replace the apple_private_key.p8 file with your `private_key.p8` file that you downloaded from Apple. then create a `.env` file in the `src` folder and set these variables to their corresponding values.
+To make requests to the Apple Music API, you need several keys, which can be obtained by enrolling in the Apple Developer Program. Once enrolled, you can access your `team_id`, `secret_key`, and `key_id` directly. However, generating a `music_user_token` requires extra steps since the Apple user authorization service is not available in Python. We recommend following the instructions in this [GitHub repository](https://github.com/KoleMyers/apple-musickit-example) to generate your `music_user_token`. Once you have all of the required information, first replace the apple_private_key.p8 file with your `private_key.p8` file that you downloaded from Apple. then create a `.env` file and set these variables to their corresponding values or export it from your cli.
 
 ```
 # Apple API configuration
-APPLE_KEY_ID=""
-APPLE_TEAM_ID=""
-APPLE_USER_TOKEN=""
+export APPLE_KEY_ID=""
+export APPLE_TEAM_ID=""
+export APPLE_USER_TOKEN=""
 ```
 
 ### Spotify API Configuration
@@ -29,13 +33,30 @@ Obtaining the Spotify API keys is more straightforward. After logging in to the 
 
 ```
 # Spotify API configuration
-CLIENT_ID=""
-CLIENT_SECRET=""
-CALLBACK_ADDRESS=""
+export CLIENT_ID=""
+export CLIENT_SECRET=""
+export CALLBACK_ADDRESS=""
 
 ```
 
+Once you have set these enviroment variables you need to download the .p8 file for your apple developer key and you can instantiate the client as follows:
+
+`from spotify_client import SpotifyClient`
+
+```
+path = "/path to your .p8 file"
+sp = SpotifyClient("<your spotify username>", path)
+
+sp.transfer_all_playlists() #to transfer all of your playlists from spotify to apple music
+
+sp.transfer_single_playlist(<spotify_playlist_url>, <name_of_the_playlist>) #to transfer a single playlist from spotify to apple music
+
+```
+
+
+
 The program uses the Spotipy API to retrieve your current Spotify playlists and iterates through each track to find an iTunes identifier using the track's ISRC (a unique identifier for any published soundtrack). For matched songs, the program sends HTTP POST requests to copy each playlist to Apple Music. To comply with Apple's rate limit on API requests, there is a 3-second interval between each insertion.
+
 
 Run tests on the program using make test.
 
