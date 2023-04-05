@@ -37,7 +37,7 @@ class SpotifyClient:
 
     def __init__(self, user, path, transfer_all=True, auth_manager=None):
         """
-        Initialize an instance of ClassName with user and path.
+        Initialize an instance of SpotifyClient with user and path.
 
         Args:
             user (str): Spotify username.
