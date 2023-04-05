@@ -27,7 +27,7 @@ class SpotifyClient:
     Attributes:
         user (str): Spotify username.
         transfer_all (bool): Determines if all playlists should be transferred. Defaults to True.
-        path (str): File path for user's Apple developer token stored in a .p8 file.
+        developer_token (str): Apple developer token stored in a .p8 file.
 
     Methods:
         transfer_all(): Initiates the process of transferring all playlists from Spotify to Apple Music.
@@ -36,6 +36,15 @@ class SpotifyClient:
     """
 
     def __init__(self, user, path, transfer_all=True, auth_manager=None):
+        """
+        Initialize an instance of ClassName with user and path.
+
+        Args:
+            user (str): Spotify username.
+            path (str): Path to the file containing the secret key.
+            transfer_all (bool, optional): Transfer all tracks to Apple Music library. Defaults to True.
+            auth_manager (any, optional): Authentication manager. Defaults to None.
+        """
         with open(path, 'r') as f:
             self.secret_key = f.read()
 
