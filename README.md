@@ -10,7 +10,7 @@ This web app allows you to easily perform cross-platform playlist migration from
 
 ## Overview
 
-This program provides a convenient way to transfer all of your playlists from Spotify to Apple Music. The initial version supports the `--all` mode to transfer all playlists at once. Before running the program, you need to configure the necessary API keys and tokens in the `config.py` file located in the `src` folder.
+This program provides a convenient way to transfer all of your playlists from Spotify to Apple Music. Before running the program, you need to configure the necessary API keys and tokens.
 
 You can install this python library using:
 
