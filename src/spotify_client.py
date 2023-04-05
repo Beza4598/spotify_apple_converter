@@ -19,12 +19,22 @@ client_id = os.environ.get("CLIENT_ID")
 client_secret = os.environ.get("CLIENT_SECRET")
 callback_address = os.environ.get("CALLBACK_ADDRESS")
 
-"""
-This script provides a way to transfer Spotify playlists to Apple Music 
-using Spotipy and Apple Music API. The script uses the International Standard 
-Recording Code (ISRC) to match the tracks between the two platforms.
-"""
+
 class SpotifyClient:
+    """
+    A class to transfer playlists from Spotify to Apple Music.
+
+    Attributes:
+        user (str): Spotify username.
+        transfer_all (bool): Determines if all playlists should be transferred. Defaults to True.
+        path (str): File path for user's Apple developer token stored in a .p8 file.
+
+    Methods:
+        transfer_all(): Initiates the process of transferring all playlists from Spotify to Apple Music.
+        transfer_single_playlist(playlist_url, playlist_name="New Playlist"): Transfers a single playlist
+        from Spotify to Apple Music.
+    """
+
     def __init__(self, user, path, transfer_all=True, auth_manager=None):
         with open(path, 'r') as f:
             self.secret_key = f.read()
@@ -229,9 +239,27 @@ class SpotifyClient:
             print("\n")
             url = 'https://music.apple.com/library/playlist/' + am_playlist_id
             print("Here is a link to the apple music playlist created: " + url)
-    
-    def transfer_playlist(self, playlist_id, playlist_name):
-        tracks = self.get_tracks_for_playlist(playlist_id)
+
+    def transfer_single_playlist(self, playlist_url, playlist_name="New Playlist"):
+        """
+        Transfers a single playlist from Spotify to Apple Music.
+
+        Args:
+            playlist_url (str): The URL of the Spotify playlist to be transferred.
+            playlist_name (str, optional): The name for the new Apple Music playlist. Defaults to "New Playlist".
+
+        This function performs the following steps:
+            1. Extracts the playlist ID from the given Spotify playlist URL.
+            2. Retrieves the tracks for the playlist.
+            3. Converts the tracks to Apple Music format using their ISRC.
+            4. Creates a new playlist on Apple Music with the given name.
+            5. Inserts the converted tracks to the new Apple Music playlist and prints their status.
+            6. Prints the URL of the newly created Apple Music playlist.
+        """
+
+        id = self.get_playlist_id(playlist_url)
+        tracks = self.get_tracks_for_playlist(id)
+
         apple_music_identifiers = self.spotifyToAppleMusicUsingISRC(tracks)
 
         am_playlist_id = self.create_new_playlist(playlist_name)
@@ -249,7 +277,12 @@ class SpotifyClient:
             url = 'https://music.apple.com/library/playlist/' + am_playlist_id
             print("Here is a link to the apple music playlist created: " + url)
 
-    
-    def start(self):
+    def transfer_all(self):
+        """
+        Initiates the process of transferring playlists.
+
+        Retrieves all of the user's playlists from Spotify and transfers each playlist to Apple Music.
+        """
+
         playlists = self.get_user_playlists_sp()
-        self.transfer_all_playlists(playlists.head(2))
+        self.transfer_all_playlists(playlists)
