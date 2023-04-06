@@ -64,9 +64,44 @@ Run tests on the program using make test.
 
 Once up and running the program should update you on the progress of conversion as shown below. And pres cmd and click on the link to go to the playlist.
 
-<img width="1174" alt="Screen Shot 2023-03-29 at 10 40 40 PM" src="https://user-images.githubusercontent.com/28851549/228714366-50e001c5-987b-426f-93a5-b3e4af8e7c9a.png">
+### Example
 
+```
 
+   #Export a single playlist 
+
+   from spotify_client import SpotifyClient
+
+   username = "bezamufc"
+   secret_key_path = "Untitled/Users/bezaamsalu/Desktop/apple_private_key.py"
+
+   sp = SpotifyClient(username, secret_key_path)
+
+   ## transfer a single playlist
+
+   playlist_url = "https://open.spotify.com/playlist/5p1MWp58nGHAryTnJdmFCb?si=ed9f8a32d1534cb4"
+   sp.transfer_single_playlist(playlist_url, "African Soul")
+```
+This is the console output when running the following code.
+
+```
+   Adding songs to playlist p.QvDQBYMI76rbqNe
+
+   Added track Ali Farka
+   Added track DéFaal Lu Wor (Once In A Lifetime)
+   Added track Everything (... Is Never Quite Enough) Added track Anna Mou
+   Added track Niko Sawa (feat. Bien)
+   Added track Mali Men
+   Added track Fala
+   Added track Ba Kristo
+   Added track Greetings from the Colony
+   Added track Alteleyeshegnem
+   Added track Temar Ledje
+   Added track Alègntayé (feat. Genet Asefa)
+   Added track Enkèn Yèlélèbesh
+
+   Here is a link to the apple music playlist created: https://music.apple.com/library/playlist/p.QvDQBYMI76rbqNe
+```
 ## Usage
 - `make`: list available commands
 - `make develop`: install and build this library and its dependencies using `pip`
