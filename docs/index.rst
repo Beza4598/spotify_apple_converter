@@ -1,6 +1,10 @@
 Welcome to Spotify to Apple Music Converter Documentation
 =========================================================
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
 This web app allows you to easily perform cross-platform playlist
 migration from spotify to apple-music and vice-versa.
 
