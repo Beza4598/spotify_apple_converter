@@ -137,8 +137,9 @@ This is the console output when running the following code.
 SpotifyClient API Documentation
 ===============================
 
+.. automodule:: src.spotify_client
+   :members:
 
-.. automodule:: src
 
 
 
