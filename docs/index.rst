@@ -109,9 +109,9 @@ Example
    playlist_url = "https://open.spotify.com/playlist/5p1MWp58nGHAryTnJdmFCb?si=ed9f8a32d1534cb4"
    sp.transfer_single_playlist(playlist_url)
 
+This is the console output when running the following code.
 
 ::
-   #Console output
 
    Adding songs to playlist p.QvDQBYMI76rbqNe
 
