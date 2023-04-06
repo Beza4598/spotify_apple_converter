@@ -133,10 +133,8 @@ This is the console output when running the following code.
 SpotifyClient API Documentation
 ===============================
 
-spotify\_client module 
-----------------------
 
-.. automodule:: src.spotify_client
+.. automodule:: src
 
 
 
