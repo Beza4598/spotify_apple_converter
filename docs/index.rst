@@ -110,6 +110,26 @@ Example
    sp.transfer_single_playlist(playlist_url)
 
 
+::
+   #Console output
+
+   Adding songs to playlist p.QvDQBYMI76rbqNe
+
+   Added track Ali Farka
+   Added track DéFaal Lu Wor (Once In A Lifetime)
+   Added track Everything (... Is Never Quite Enough) Added track Anna Mou
+   Added track Niko Sawa (feat. Bien)
+   Added track Mali Men
+   Added track Fala
+   Added track Ba Kristo
+   Added track Greetings from the Colony
+   Added track Alteleyeshegnem
+   Added track Temar Ledje
+   Added track Alègntayé (feat. Genet Asefa)
+   Added track Enkèn Yèlélèbesh
+
+   Here is a link to the apple music playlist created: https://music.apple.com/library/playlist/p.QvDQBYMI76rbqNe
+
 SpotifyClient API Documentation
 ===============================
 
