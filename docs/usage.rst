@@ -1,5 +1,5 @@
-Spotify to Apple Music Converter - Overview
-===========================================
+Spotify to Apple Music Converter
+=================================
 
 This web app allows you to easily perform cross-platform playlist
 migration from spotify to apple-music and vice-versa.
@@ -89,3 +89,35 @@ the playlist.
 .. |License: MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
    :target: https://opensource.org/licenses/MIT
 .. |PyPI| image:: https://img.shields.io/pypi/v/spotify-to-apple-py
+
+Example
+--------
+
+::
+
+   #Export a single playlist 
+
+   from spotify_client import SpotifyClient
+
+   username = "bezamufc"
+   secret_key_path = "Untitled/Users/bezaamsalu/Desktop/apple_private_key.py"
+
+   sp = SpotifyClient(username, secret_key_path)
+
+   ## transfer a single playlist
+
+   playlist_url = "https://open.spotify.com/playlist/5p1MWp58nGHAryTnJdmFCb?si=ed9f8a32d1534cb4"
+   sp.transfer_single_playlist(playlist_url)
+
+
+SpotifyClient API Documentation
+===============================
+
+spotify\_client module 
+----------------------
+
+.. automodule:: src.spotify_client
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
