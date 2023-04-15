@@ -64,18 +64,18 @@ Run tests on the program using make test.
 
 Once up and running the program should update you on the progress of conversion as shown below. And pres cmd and click on the link to go to the playlist.
 
-### Demo
+## Demo
 
 #### Transfer all of your playlists from Spotify to Apple Music
 
 ![transfer-all](https://github.com/Beza4598/spotify_apple_converter/blob/main/docs/transfer-all.gif)
 
-## Transfer a particular playlist from Spotify to Apple Msuic using playlist url
+#### Transfer a particular playlist from Spotify to Apple Msuic using playlist url
 
 ![transfer-single](https://github.com/Beza4598/spotify_apple_converter/blob/main/docs/transfer-single.gif)
 
 
-#### Starter Code
+## Starter Code
 ```
 
    #Export a single playlist 
