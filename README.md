@@ -66,7 +66,7 @@ Once up and running the program should update you on the progress of conversion 
 
 ### Demo
 
-## Transfer all of your playlists from Spotify to Apple Music
+#### Transfer all of your playlists from Spotify to Apple Music
 
 ![transfer-all](https://github.com/Beza4598/spotify_apple_converter/blob/main/docs/transfer-all.gif)
 
@@ -75,7 +75,7 @@ Once up and running the program should update you on the progress of conversion 
 ![transfer-single](https://github.com/Beza4598/spotify_apple_converter/blob/main/docs/transfer-single.gif)
 
 
-## Starter Code
+#### Starter Code
 ```
 
    #Export a single playlist 
