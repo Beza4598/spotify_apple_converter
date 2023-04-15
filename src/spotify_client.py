@@ -231,16 +231,16 @@ class SpotifyClient:
 
     def _transfer_all_playlists(self, playlist_dataframe_sp):
         for ind in playlist_dataframe_sp.index:
-            tracks = self.get_tracks_for_playlist(playlist_dataframe_sp["playlist_id"][ind])
-            apple_music_identifiers = self.spotifyToAppleMusicUsingISRC(tracks)
+            tracks = self._get_tracks_for_playlist(playlist_dataframe_sp["playlist_id"][ind])
+            apple_music_identifiers = self._spotifyToAppleMusicUsingISRC(tracks)
 
-            am_playlist_id = self.create_new_playlist(playlist_dataframe_sp["playlist_name"][ind])
+            am_playlist_id = self._create_new_playlist(playlist_dataframe_sp["playlist_name"][ind])
 
             print(f"\nAdding songs to playlist {am_playlist_id}")
 
             for ind in apple_music_identifiers.index:
                 track_name = apple_music_identifiers["track_name"][ind]
-                if self.insert_track_to_playlist(am_playlist_id, apple_music_identifiers["id"][ind]):
+                if self._insert_track_to_playlist(am_playlist_id, apple_music_identifiers["id"][ind]):
                     print(f"Added track {track_name}")
                 else:
                     print(f"Unable to add track {track_name}")
@@ -249,7 +249,7 @@ class SpotifyClient:
             url = 'https://music.apple.com/library/playlist/' + am_playlist_id
             print("Here is a link to the apple music playlist created: " + url)
 
-    def _get_playlist_id(url):
+    def _get_playlist_id(self, url):
         path = url.rsplit('/', 1)[-1]
 
         # Remove any trailing slash from the path
@@ -257,6 +257,16 @@ class SpotifyClient:
             path = path[:-1]
 
         return path
+
+    def transfer_all_playlists(self):
+        """
+        Initiates the process of transferring playlists.
+
+        Retrieves all of the user's playlists from Spotify and transfers each playlist to Apple Music.
+        """
+
+        playlists = self._get_user_playlists_sp()
+        self._transfer_all_playlists(playlists)
 
     def transfer_single_playlist(self, playlist_url, playlist_name="New Playlist"):
         """
@@ -291,16 +301,6 @@ class SpotifyClient:
             else:
                 print(f"Unable to add track {track_name}")
 
-            print("\n")
-            url = 'https://music.apple.com/library/playlist/' + am_playlist_id
-            print("Here is a link to the apple music playlist created: " + url)
-
-    def transfer_all(self):
-        """
-        Initiates the process of transferring playlists.
-
-        Retrieves all of the user's playlists from Spotify and transfers each playlist to Apple Music.
-        """
-
-        playlists = self._get_user_playlists_sp()
-        self._transfer_all_playlists(playlists)
+        print("\n")
+        url = 'https://music.apple.com/library/playlist/' + am_playlist_id
+        print("Here is a link to the apple music playlist created: " + url)
