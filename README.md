@@ -66,6 +66,14 @@ Once up and running the program should update you on the progress of conversion 
 
 ### Example
 
+## Transfer all of your playlists from Spotify to Apple Music
+
+![transfer-all](https://github.com/Beza4598/spotify_apple_converter/blob/main/docs/transfer-all.gif)
+
+## Transfer a particular playlist from Spotify to Apple Msuic using playlist url
+
+![transfer-single](https://github.com/Beza4598/spotify_apple_converter/blob/main/docs/transfer-single.gif)
+
 ```
 
    #Export a single playlist 
@@ -102,6 +110,8 @@ This is the console output when running the following code.
 
    Here is a link to the apple music playlist created: https://music.apple.com/library/playlist/p.QvDQBYMI76rbqNe
 ```
+
+
 ## Usage
 - `make`: list available commands
 - `make develop`: install and build this library and its dependencies using `pip`
