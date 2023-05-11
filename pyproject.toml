@@ -11,7 +11,7 @@ name = "spotify-to-apple-py"
 authors = [{name = "Beza Amsalu", email = "beza.amsalu@columbia.edu"}]
 description="Convert spotify playlists to apple music"
 readme = "README.md"
-version = "0.2.0"
+version = "0.2.1"
 requires-python = ">=3.7"
 
 dependencies = ['pandas==1.5.3',
