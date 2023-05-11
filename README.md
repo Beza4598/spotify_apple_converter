@@ -7,8 +7,8 @@ This web app allows you to easily perform cross-platform playlist migration from
 ![Codecov](https://img.shields.io/codecov/c/github/Beza4598/spotify_apple_converter)
 [![Build Status](https://github.com/Beza4598/spotify_apple_converter/workflows/Build%20Status/badge.svg?branch=main)](https://github.com/Beza4598/spotify_apple_converter/actions?query=workflow%3A%22Build+Status%22)
 [![PyPI](https://img.shields.io/pypi/v/spotify-to-apple-py)](https://pypi.org/project/apple-music-python/)
-
 [![Github Page](https://img.shields.io/badge/%20doc-github%20page-%231674b1?style=flat&labelColor=ef8336)](https://spotify-apple-converter.readthedocs.io/en/latest/)
+
 ## Overview
 
 This program provides a convenient way to transfer all of your playlists from Spotify to Apple Music. Before running the program, you need to configure the necessary API keys and tokens.
