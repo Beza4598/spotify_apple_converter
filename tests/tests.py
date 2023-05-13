@@ -1,6 +1,5 @@
 import unittest
 import pandas as pd
-import os
 from unittest.mock import patch
 from src.spotify_client import SpotifyClient
 from unittest.mock import MagicMock
