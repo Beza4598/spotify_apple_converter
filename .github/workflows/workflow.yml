@@ -28,6 +28,7 @@ jobs:
       APPLE_USER_TOKEN: ${{ secrets.APPLE_USER_TOKEN }}
       SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
       SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
 
     steps:
     - uses: actions/checkout@v2

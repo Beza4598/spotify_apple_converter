@@ -18,6 +18,7 @@ music_user_token = os.environ.get("APPLE_USER_TOKEN")
 client_id = os.environ.get("CLIENT_ID")
 client_secret = os.environ.get("CLIENT_SECRET")
 callback_address = os.environ.get("CALLBACK_ADDRESS")
+private_key = os.environ.get("APPLE_PRIVATE_KEY")
 
 
 class SpotifyClient:
@@ -35,7 +36,7 @@ class SpotifyClient:
         from Spotify to Apple Music.
     """
 
-    def __init__(self, user, path, transfer_all=True, auth_manager=None):
+    def __init__(self, user, path=None, transfer_all=True, auth_manager=None):
         """
         Initialize an instance of SpotifyClient with user and path.
 
@@ -45,8 +46,11 @@ class SpotifyClient:
             transfer_all (bool, optional): Transfer all tracks to Apple Music library. Defaults to True.
             auth_manager (any, optional): Authentication manager. Defaults to None.
         """
-        with open(path, 'r') as f:
-            self.secret_key = f.read()
+        if path:
+            with open(path, 'r') as f:
+                self.secret_key = f.read()
+        else:
+            self.secret_key = private_key
 
         self.user = user
         self.transfer_all = transfer_all
