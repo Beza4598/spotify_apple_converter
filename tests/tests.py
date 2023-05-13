@@ -143,6 +143,20 @@ class TestSpotifyClient(unittest.TestCase):
 
         self.assertTrue(result)
 
+    def test_get_playlist_id(self):
+        auth_manager_mock = MagicMock(spec=SpotifyOAuth)
+        cache_handler_mock = MagicMock(spec=CacheFileHandler)
+        auth_manager_mock.cache_handler = cache_handler_mock
+        auth_manager_mock.get_cached_token.return_value = {"access_token": "fake_access_token"}
+        client = SpotifyClient("testuser", path=None, transfer_all=False, auth_manager=auth_manager_mock)
+
+        test_url_1 = "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M"
+        test_url_2 = "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M"
+        expected_output = "37i9dQZF1DXcBWIGoYBM5M"
+
+        self.assertEqual(client._get_playlist_id(test_url_1), expected_output)
+        self.assertEqual(client._get_playlist_id(test_url_2), expected_output)
+
 
 if __name__ == "__main__":
     unittest.main()
