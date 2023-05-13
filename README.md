@@ -8,7 +8,7 @@ This web app allows you to easily perform cross-platform playlist migration from
 [![Build Status](https://github.com/Beza4598/spotify_apple_converter/workflows/Build%20Status/badge.svg?branch=main)](https://github.com/Beza4598/spotify_apple_converter/actions?query=workflow%3A%22Build+Status%22)
 [![PyPI](https://img.shields.io/pypi/v/spotify-to-apple-py)](https://pypi.org/project/spotify-to-apple-py/)
 [![Github Page](https://img.shields.io/badge/%20doc-github%20page-%231674b1?style=flat&labelColor=ef8336)](https://spotify-apple-converter.readthedocs.io/en/latest/)
-[!Docs](https://readthedocs.org/projects/spotify-apple-converter/badge/?version=latest)
+[![Docs](https://readthedocs.org/projects/spotify-apple-converter/badge/?version=latest)]
 
 ## Overview
 
