@@ -1,126 +1,164 @@
 # Spotify to Apple Music Converter
 
-This web app allows you to easily perform cross-platform playlist migration from spotify to apple-music and vice-versa.
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![GitHub issues](https://img.shields.io/github/issues-raw/Beza4598/spotify_apple_converter)
-![Codecov](https://img.shields.io/codecov/c/github/Beza4598/spotify_apple_converter)
-[![Build Status](https://github.com/Beza4598/spotify_apple_converter/workflows/Build%20Status/badge.svg?branch=main)](https://github.com/Beza4598/spotify_apple_converter/actions?query=workflow%3A%22Build+Status%22)
+[![GitHub issues](https://img.shields.io/github/issues-raw/Beza4598/spotify_apple_converter)](https://github.com/Beza4598/spotify_apple_converter/issues)
+[![Codecov](https://img.shields.io/codecov/c/github/Beza4598/spotify_apple_converter)](https://codecov.io/gh/Beza4598/spotify_apple_converter)
+[![Build Status](https://github.com/Beza4598/spotify_apple_converter/actions/workflows/workflow.yml/badge.svg?branch=main)](https://github.com/Beza4598/spotify_apple_converter/actions/workflows/workflow.yml)
 [![PyPI](https://img.shields.io/pypi/v/spotify-to-apple-py)](https://pypi.org/project/spotify-to-apple-py/)
-[![Github Page](https://img.shields.io/badge/%20doc-github%20page-%231674b1?style=flat&labelColor=ef8336)](https://spotify-apple-converter.readthedocs.io/en/latest/)
-![Docs](https://readthedocs.org/projects/spotify-apple-converter/badge/?version=latest)
+[![Docs](https://readthedocs.org/projects/spotify-apple-converter/badge/?version=latest)](https://spotify-apple-converter.readthedocs.io/en/latest/)
 
-## Overview
+<!-- docs-start -->
 
-This program provides a convenient way to transfer all of your playlists from Spotify to Apple Music. Before running the program, you need to configure the necessary API keys and tokens.
+A Python library and command-line tool that copies your Spotify playlists into your Apple Music library.
 
-You can install this python library using:
+Each song is matched by its ISRC, the international code that identifies a specific recording, so the
+Apple Music copy is the same recording rather than a lookalike from a search. Songs that can't be matched are
+listed at the end of each transfer so you can add them by hand.
 
-`pip install spotify-to-apple-py`
-
-### Apple Music API Configuration
-
-To make requests to the Apple Music API, you need several keys, which can be obtained by enrolling in the Apple Developer Program. Once enrolled, you can access your `team_id`, `secret_key`, and `key_id` directly. However, generating a `music_user_token` requires extra steps since the Apple user authorization service is not available in Python. We recommend following the instructions in this [GitHub repository](https://github.com/KoleMyers/apple-musickit-example) to generate your `music_user_token`. Once you have all of the required information, first replace the apple_private_key.p8 file with your `private_key.p8` file that you downloaded from Apple. then create a `.env` file and set these variables to their corresponding values or export it from your cli.
+## Installation
 
 ```
-# Apple API configuration
-export APPLE_KEY_ID=""
-export APPLE_TEAM_ID=""
-export APPLE_USER_TOKEN=""
+pip install spotify-to-apple-py
 ```
 
-### Spotify API Configuration
+Python 3.10 or newer is required.
 
-Obtaining the Spotify API keys is more straightforward. After logging in to the Spotify Web API Dashboard with your Spotify account, you will have access to the required keys. Add them to the corresponding variables in the .env file you just created.
+## Setup
 
-```
-# Spotify API configuration
-export CLIENT_ID=""
-export CLIENT_SECRET=""
-export CALLBACK_ADDRESS=""
+You need API credentials from both services. Put them in a `.env` file in the folder you run from, or export
+them as environment variables.
 
 ```
+# Spotify
+SPOTIFY_CLIENT_ID=""
+SPOTIFY_CLIENT_SECRET=""
+SPOTIFY_REDIRECT_URI="http://127.0.0.1:8888/callback"
 
-Once you have set these enviroment variables you need to download the .p8 file for your apple developer key and you can instantiate the client as follows:
-
-`from spotify_client import SpotifyClient`
-
-```
-path = "/path to your .p8 file"
-sp = SpotifyClient("<your spotify username>", path)
-
-sp.transfer_all_playlists() #to transfer all of your playlists from spotify to apple music
-
-sp.transfer_single_playlist(<spotify_playlist_url>, <name_of_the_playlist>) #to transfer a single playlist from spotify to apple music
-
+# Apple Music
+APPLE_KEY_ID=""
+APPLE_TEAM_ID=""
+APPLE_USER_TOKEN=""
+APPLE_PRIVATE_KEY_PATH="/path/to/AuthKey_XXXXXXXXXX.p8"
 ```
 
+### Spotify
 
+1. Create an app in the [Spotify developer dashboard](https://developer.spotify.com/dashboard) and copy its
+   client ID and secret.
+2. Add the redirect URI above to the app's settings. Spotify only accepts `http` redirects to a loopback
+   address like `127.0.0.1`, not `localhost`.
+3. While the app is in development mode, Spotify requires the app owner to have Premium and only lets the
+   accounts listed under *User Management* sign in. It also only returns the songs in playlists you own or
+   collaborate on, so playlists you merely follow are reported and skipped.
 
-The program uses the Spotipy API to retrieve your current Spotify playlists and iterates through each track to find an iTunes identifier using the track's ISRC (a unique identifier for any published soundtrack). For matched songs, the program sends HTTP POST requests to copy each playlist to Apple Music. To comply with Apple's rate limit on API requests, there is a 3-second interval between each insertion.
+The first run opens a browser so you can sign in to Spotify. The token is cached in a `.cache` file
+(`.cache-<user>` if you pass a user name), so later runs don't ask again.
 
+### Apple Music
 
-Run tests on the program using make test.
+You need a membership in the [Apple Developer Program](https://developer.apple.com/programs/).
 
+1. Create a MusicKit key under *Certificates, Identifiers & Profiles → Keys*. Download the `.p8` file and
+   note the key ID and your team ID.
+2. Generate a Music User Token for your Apple Music account. Apple doesn't provide a way to do this from
+   Python, so follow the steps in [apple-musickit-example](https://github.com/KoleMyers/apple-musickit-example).
 
-Once up and running the program should update you on the progress of conversion as shown below. And pres cmd and click on the link to go to the playlist.
+Instead of `APPLE_PRIVATE_KEY_PATH`, you can put the contents of the `.p8` file in `APPLE_PRIVATE_KEY`, which
+is handy for CI secrets. The variable names used before 0.3 (`CLIENT_ID`, `CLIENT_SECRET`,
+`CALLBACK_ADDRESS`) still work.
+
+## Command line
+
+```
+spotify-to-apple list                                   # number your Spotify playlists
+spotify-to-apple all                                    # transfer every playlist
+spotify-to-apple all --select 1,3,5-7                   # transfer some of them
+spotify-to-apple playlist https://open.spotify.com/playlist/5p1MWp58nGHAryTnJdmFCb?si=ed9f8a32d1534cb4
+spotify-to-apple playlist <url> --name "African Soul"   # choose the Apple Music name
+spotify-to-apple playlist <url> --dry-run               # see what would match, change nothing
+```
+
+Global options go before the command: `--key-file` points at the `.p8` key, `--storefront` sets the Apple
+Music country (it's read from your account by default), and `--user` names the Spotify token cache.
+
+```
+$ spotify-to-apple playlist https://open.spotify.com/playlist/5p1MWp58nGHAryTnJdmFCb
+
+Transferring 'Road Trip'
+Added 41 of 43 songs
+  not on Apple Music: Some Song - Some Artist
+  not on Apple Music: Another Song - Another Artist
+  skipped 1 local files, podcast episodes or unavailable tracks
+Apple Music playlist: https://music.apple.com/library/playlist/p.XXXXXXXXXXXXXX
+```
+
+## Python
+
+```python
+from spotify_to_apple import SpotifyClient
+
+client = SpotifyClient(path="AuthKey_XXXXXXXXXX.p8")
+
+result = client.transfer_single_playlist("https://open.spotify.com/playlist/5p1MWp58nGHAryTnJdmFCb")
+print(result.url)
+for track in result.unmatched:
+    print("Add by hand:", track)
+
+results = client.transfer_all_playlists()
+```
+
+Both methods return `TransferResult` objects listing what was added, what couldn't be matched and what
+failed. Pass `dry_run=True` to only match songs, or `verbose=False` to the constructor to turn off printing.
+To pass credentials yourself instead of reading the environment, use `Credentials`:
+
+```python
+from spotify_to_apple import Credentials, SpotifyClient
+
+credentials = Credentials(
+    spotify_client_id="...",
+    spotify_client_secret="...",
+    apple_key_id="...",
+    apple_team_id="...",
+    apple_private_key=open("AuthKey_XXXXXXXXXX.p8").read(),
+    apple_music_user_token="...",
+)
+client = SpotifyClient(credentials=credentials)
+```
+
+## How it works
+
+1. Reads your playlists and their songs from Spotify, following every page of results. Local files, podcast
+   episodes and songs that are no longer available are skipped.
+2. Looks up the songs' ISRCs in the Apple Music catalog for your storefront, 25 at a time.
+3. Creates a playlist in your Apple Music library and adds the matched songs in batches, in the original
+   order. If Apple rejects a batch, its songs are retried one by one so a single bad song doesn't sink the rest.
+4. When Apple rate-limits a request, waits as long as Apple asks and tries again.
+
+## Upgrading from 0.2
+
+- Import from `spotify_to_apple` instead of `spotify_client`.
+- `transfer_single_playlist` names the Apple Music playlist after the Spotify playlist unless you pass a name.
+- Both transfer methods return results instead of `None`, and print a summary instead of a line per song.
+- The `transfer_all` constructor argument is gone. Pass playlist IDs to `transfer_all_playlists` to pick some.
+- Python 3.7–3.9 and pandas are no longer needed or supported.
 
 ## Demo
 
-#### Transfer all of your playlists from Spotify to Apple Music
+These recordings are from version 0.2, which printed a line for each song instead of a summary.
 
-![transfer-all](https://github.com/Beza4598/spotify_apple_converter/blob/main/docs/transfer-all.gif)
+![Transferring all playlists](https://raw.githubusercontent.com/Beza4598/spotify_apple_converter/main/docs/transfer-all.gif)
 
-#### Transfer a particular playlist from Spotify to Apple Msuic using playlist url
+![Transferring a single playlist](https://raw.githubusercontent.com/Beza4598/spotify_apple_converter/main/docs/transfer-single.gif)
 
-![transfer-single](https://github.com/Beza4598/spotify_apple_converter/blob/main/docs/transfer-single.gif)
-
-
-## Starter Code
-```
-
-   #Export a single playlist 
-
-   from spotify_client import SpotifyClient
-
-   username = "bezamufc"
-   secret_key_path = "Untitled/Users/bezaamsalu/Desktop/apple_private_key.py"
-
-   sp = SpotifyClient(username, secret_key_path)
-
-   ## transfer a single playlist
-
-   playlist_url = "https://open.spotify.com/playlist/5p1MWp58nGHAryTnJdmFCb?si=ed9f8a32d1534cb4"
-   sp.transfer_single_playlist(playlist_url, "African Soul")
-```
-This is the console output when running the following code.
+## Development
 
 ```
-   Adding songs to playlist p.QvDQBYMI76rbqNe
-
-   Added track Ali Farka
-   Added track DéFaal Lu Wor (Once In A Lifetime)
-   Added track Everything (... Is Never Quite Enough) Added track Anna Mou
-   Added track Niko Sawa (feat. Bien)
-   Added track Mali Men
-   Added track Fala
-   Added track Ba Kristo
-   Added track Greetings from the Colony
-   Added track Alteleyeshegnem
-   Added track Temar Ledje
-   Added track Alègntayé (feat. Genet Asefa)
-   Added track Enkèn Yèlélèbesh
-
-   Here is a link to the apple music playlist created: https://music.apple.com/library/playlist/p.QvDQBYMI76rbqNe
+make develop    # install with development tools
+make test       # run the tests (no API credentials needed)
+make lint       # black and flake8
+make annotate   # mypy
+make coverage   # tests with coverage
+make dist       # build and check the package
 ```
 
-
-## Usage
-- `make`: list available commands
-- `make develop`: install and build this library and its dependencies using `pip`
-- `make build`: build the library using `setuptools`
-- `make lint`: perform static analysis of this library with `flake8` and `black`
-- `make format`: autoformat this library using `black`
-- `make test`: run automated tests with `pytest`
-- `make coverage`: run automated tests with `pytest` and collect coverage information
-- `make dist`: package library for distribution
+See [CONTRIBUTING.md](https://github.com/Beza4598/spotify_apple_converter/blob/main/CONTRIBUTING.md).

@@ -1,39 +1,16 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+from importlib.metadata import version as package_version
 
-# -- Path setup -----------------------------------------------------
-
-import os
-import sys
-import sphinx_rtd_theme
-
-sys.path.insert(0, os.path.abspath('..'))
-
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
-project = 'Spotify To Apple Music Converter'
-copyright = '2023, Beza Amsalu'
+project = 'Spotify to Apple Music Converter'
+copyright = '2023-2026, Beza Amsalu'
 author = 'Beza Amsalu'
-release = '0.1.1'
+release = package_version('spotify-to-apple-py')
+version = '.'.join(release.split('.')[:2])
 
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-
-extensions = ['recommonmark', 'sphinx.ext.autodoc']
-source_suffix = ['.rst', '.md']
-
-templates_path = ['_templates']
+extensions = ['myst_parser', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon']
+source_suffix = {'.rst': 'restructuredtext', '.md': 'markdown'}
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+autodoc_member_order = 'bysource'
+myst_heading_anchors = 3
 
-
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-# html_theme = 'alabaster'
-# html_static_path = ['_static']
-
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'sphinx_rtd_theme'
+suppress_warnings = ['myst.header']

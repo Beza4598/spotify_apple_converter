@@ -133,5 +133,8 @@ dmypy.json
 .coverage
 .cache-*
 
-_*
+docs/_build/
+coverage.xml
+
+*.p8
 

@@ -14,43 +14,57 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-
+  test:
+    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        python-version: [3.9]
-    
-    env:
-      APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
-      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      APPLE_USER_TOKEN: ${{ secrets.APPLE_USER_TOKEN }}
-      SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-      SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-      APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: "pip"
-        cache-dependency-path: 'pyproject.toml'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
 
-    - name: Install dependencies
-      run: |
-        make develop
-    - name: Build 
-      run: |
-        make build
-    - name: Lint
-      run: |
-        make lint
-    - name: Generate Report
-      run: |
-        make coverage
-    - name: Upload coverage
-      uses: codecov/codecov-action@v3
+      - name: Install
+        run: make develop
+
+      - name: Lint
+        run: make lint
+
+      - name: Type check
+        run: make annotate
+
+      - name: Test
+        run: make coverage
+
+      - name: Upload coverage
+        if: matrix.python-version == '3.13'
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build and check
+        run: |
+          python -m pip install build twine
+          make dist
+
+      - name: Install the wheel and run the CLI
+        run: |
+          python -m pip install dist/*.whl
+          spotify-to-apple --help
