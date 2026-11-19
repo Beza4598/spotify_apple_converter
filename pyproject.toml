@@ -50,7 +50,7 @@ develop = [
     "flake8>=7",
     "flake8-pyproject",
     "mypy>=1.10",
-    "pytest>=8",
+    "pytest>=9.2.0",
     "pytest-cov>=5",
     "responses>=0.25",
     "twine",
