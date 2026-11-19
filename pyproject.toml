@@ -45,7 +45,7 @@ spotify-to-apple = "spotify_to_apple.cli:main"
 
 [project.optional-dependencies]
 develop = [
-    "black>=24",
+    "black>=26.10.1",
     "build",
     "flake8>=7",
     "flake8-pyproject",
