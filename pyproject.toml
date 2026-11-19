@@ -52,7 +52,7 @@ develop = [
     "mypy>=1.10",
     "pytest>=8",
     "pytest-cov>=5",
-    "responses>=0.25",
+    "responses>=0.26.3",
     "twine",
     "types-requests",
 ]
