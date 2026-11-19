@@ -1,98 +1,48 @@
-#########
-# BUILD #
-#########
-develop:  ## install dependencies and build library
-	python3 -m pip install -e .[develop]
+PYTHON ?= python3
 
-build:  ## build the python library
-	python3 setup.py build build_ext --inplace
+develop:  ## install the library in editable mode with development tools
+	$(PYTHON) -m pip install -e .[develop]
 
-install:  ## install library
-	python3 -m pip install .
+install:  ## install the library
+	$(PYTHON) -m pip install .
 
-#########
-# LINTS #
-#########
-lint:  ## run static analysis with flake8
-	python3 -m black --check src tests
-	python3 -m flake8 src tests
+lint:  ## check formatting with black and run flake8
+	$(PYTHON) -m black --check src tests
+	$(PYTHON) -m flake8 src tests
 
-# Alias
 lints: lint
 
-format: ## run autoformatting with black
-	black ./
+format:  ## format the code with black
+	$(PYTHON) -m black src tests
 
-# alias
 fix: format
 
-check:  ## check assets for packaging
-	check-manifest -v
+annotate:  ## run type checking with mypy
+	$(PYTHON) -m mypy src
 
-# Alias
-checks: check
+test:  ## run the tests
+	$(PYTHON) -m pytest
 
-annotate:  ## run type checking
-	python3 -m mypy ./spotify-to-apple-py
-
-#########
-# TESTS #
-#########
-test: ## clean and run unit tests
-	python3 -m tests.tests
-
-coverage:  ## clean and run unit tests with coverage
-		coverage run -m unittest tests.tests
-
-# Alias
 tests: test
 
-###########
-# VERSION #
-###########
-show-version:
-	bump2version --dry-run --allow-dirty setup.py --list | grep current | awk -F= '{print $2}'
+coverage:  ## run the tests and collect coverage
+	$(PYTHON) -m pytest --cov --cov-report=term-missing --cov-report=xml
 
-patch:
-	bump2version patch
+dist: clean  ## build and check the sdist and wheel
+	$(PYTHON) -m build
+	$(PYTHON) -m twine check dist/*
 
-minor:
-	bump2version minor
+publish: dist  ## upload the built package to PyPI
+	$(PYTHON) -m twine upload dist/*
 
-major:
-	bump2version major
+clean:  ## remove build and test artifacts
+	rm -rf .coverage coverage.xml htmlcov build dist src/*.egg-info .pytest_cache .mypy_cache docs/_build
 
-########
-# DIST #
-########
-dist-build:  # Build python dist
-	python3 setup.py sdist bdist_wheel
-
-dist-check:
-	python3 -m twine check dist/*
-
-dist: clean build dist-build dist-check  ## Build dists
-
-publish:  # Upload python assets
-	echo "would usually run python -m twine upload dist/* --skip-existing"
-
-#########
-# CLEAN #
-#########
-deep-clean: ## clean everything from the repository
+deep-clean:  ## remove every untracked file
 	git clean -fdx
 
-clean: ## clean the repository
-	rm -rf .coverage coverage cover htmlcov logs build dist *.egg-info .pytest_cache
-
-############################################################################################
-
-# Thanks to Francoise at marmelab.com for this
 .DEFAULT_GOAL := help
 help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
-print-%:
-	@echo '$*=$($*)'
-
-.PHONY: develop build install lint lints format fix check checks annotate test coverage show-coverage tests show-version patch minor major dist-build dist-check dist publish deep-clean clean help
+.PHONY: develop install lint lints format fix annotate test tests coverage dist publish clean deep-clean help
